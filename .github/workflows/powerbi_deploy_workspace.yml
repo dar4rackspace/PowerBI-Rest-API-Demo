@@ -1,14 +1,18 @@
-name: SQLFluff
+name: Publish 2 Workspace
 
 on:
-  - push
+  push:
+    branches:
+      - main  # Adjust branch name as needed
 
 jobs:
   publish-2-workspace:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # This grants write permission
     steps:
-      - name: checkout
-        uses: actions/checkout@v4 
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Get changed files
         id: changed-files
