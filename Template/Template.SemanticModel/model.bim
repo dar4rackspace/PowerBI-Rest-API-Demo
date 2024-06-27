@@ -1,0 +1,429 @@
+{
+  "compatibilityLevel": 1567,
+  "model": {
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"p_workspace_name\",\"p_gcp_project\",\"v_workspace_name_\",\"template_query\"]"
+      },
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "1"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.129.1229.0 (24.05)"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"DevMode\"]"
+      }
+    ],
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "p_gcp_project",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "description": "Points to correct dataset depending on environment",
+        "expression": "\"rax-enterprisebi-dev\" meta [IsParameterQuery=true, List={\"rax-enterprisebi\", \"rax-enterprisebi-dev\"}, DefaultValue=\"rax-enterprisebi\", Type=\"Text\", IsParameterQueryRequired=true]",
+        "kind": "m",
+        "lineageTag": "666dd64a-a145-42f8-bc81-9e540fac4c1d",
+        "queryGroup": "Parameters"
+      },
+      {
+        "name": "p_workspace_name",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "description": "Dataform worspace name goes here. This inserts the prefixes when param_gcp_project = 'rax-enterprisebi-dev' only",
+        "expression": "\"aws_recon\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "kind": "m",
+        "lineageTag": "bcce41ba-3290-4a49-baca-3b9f9b572ae2",
+        "queryGroup": "Parameters"
+      },
+      {
+        "name": "template_query",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Exception"
+          }
+        ],
+        "expression": [
+          "let",
+          "    Source = GoogleBigQuery.Database([BillingProject=\"rax-enterprisebi\"]),",
+          "",
+          "    #\"rax-enterprisebi\" = Source{[Name=p_gcp_project]}[Data], // 1. Point to project",
+          "        dataform_Schema = #\"rax-enterprisebi\"{[",
+          "            Name=\"dataform\", // 2. Point to dataset",
+          "            Kind=\"Schema\"",
+          "        ]}[Data],",
+          "        pointed_dataset = dataform_Schema{[",
+          "            Name=(",
+          "                v_workspace_name_ // 3. Point to workspace",
+          "                & \"table_name_here\" // 4. Point to table",
+          "            ),",
+          "            Kind=\"Table\" // 5. Define if Table or View",
+          "        ]}[Data],",
+          "",
+          "    #\"Converted to Proper\" = Table.TransformColumnNames(",
+          "        Table.TransformColumnNames(",
+          "            pointed_dataset,",
+          "            each Text.Replace(_, \"_\", \" \")),",
+          "        Text.Proper",
+          "    )",
+          "in",
+          "    #\"Converted to Proper\""
+        ],
+        "kind": "m",
+        "lineageTag": "9eabf4fa-d620-496c-8bad-a19874a0a2c0"
+      },
+      {
+        "name": "v_workspace_name_",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Text"
+          }
+        ],
+        "description": [
+          "If in production: will return blank",
+          "If in dev: add <param_workspace_name>_ to table reference"
+        ],
+        "expression": [
+          "let",
+          "    Source =",
+          "        if p_gcp_project = \"rax-enterprisebi\" ",
+          "        then \"\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+          "        else (p_workspace_name & \"_\") meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+          "in",
+          "    Source"
+        ],
+        "kind": "m",
+        "lineageTag": "b2ae2c4c-c4cb-49a6-a1ee-a2aee17f02a7",
+        "queryGroup": "Vars and Funcs"
+      }
+    ],
+    "queryGroups": [
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "0"
+          }
+        ],
+        "folder": "Parameters"
+      },
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "2"
+          }
+        ],
+        "folder": "Queries"
+      },
+      {
+        "annotations": [
+          {
+            "name": "PBI_QueryGroupOrder",
+            "value": "1"
+          }
+        ],
+        "folder": "Vars and Funcs"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "DateTableTemplate_6431a574-a085-450d-9a72-6bae2cdba0c6",
+        "annotations": [
+          {
+            "name": "__PBI_TemplateDateTable",
+            "value": "true"
+          },
+          {
+            "name": "DefaultItem",
+            "value": "DateHierarchy"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Date",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              }
+            ],
+            "dataCategory": "PaddedDateTableDates",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "isNameInferred": true,
+            "lineageTag": "14afd0db-aa6c-47a0-8a92-2d567066737c",
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Year",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Year"
+              }
+            ],
+            "dataCategory": "Years",
+            "dataType": "int64",
+            "expression": "YEAR([Date])",
+            "isHidden": true,
+            "lineageTag": "96fb7d0e-6c8b-4df0-ad44-762f833d07ed",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "MonthNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "MonthNumber"
+              }
+            ],
+            "dataCategory": "MonthOfYear",
+            "dataType": "int64",
+            "expression": "MONTH([Date])",
+            "isHidden": true,
+            "lineageTag": "ca29fcae-da83-4a83-b7d9-6b49f07e7d6c",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Month",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Month"
+              }
+            ],
+            "dataCategory": "Months",
+            "dataType": "string",
+            "expression": "FORMAT([Date], \"MMMM\")",
+            "isHidden": true,
+            "lineageTag": "4886249f-adc7-4513-9c0a-b7c56fde9a03",
+            "sortByColumn": "MonthNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "QuarterNo",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "QuarterNumber"
+              }
+            ],
+            "dataCategory": "QuarterOfYear",
+            "dataType": "int64",
+            "expression": "INT(([MonthNo] + 2) / 3)",
+            "isHidden": true,
+            "lineageTag": "769b4cc4-715c-44ab-858a-95f2bef2b86e",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Quarter",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Quarter"
+              }
+            ],
+            "dataCategory": "Quarters",
+            "dataType": "string",
+            "expression": "\"Qtr \" & [QuarterNo]",
+            "isHidden": true,
+            "lineageTag": "b834aebe-e598-49be-b4ce-75457f4329c4",
+            "sortByColumn": "QuarterNo",
+            "summarizeBy": "none",
+            "type": "calculated"
+          },
+          {
+            "name": "Day",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "User"
+              },
+              {
+                "name": "TemplateId",
+                "value": "Day"
+              }
+            ],
+            "dataCategory": "DayOfMonth",
+            "dataType": "int64",
+            "expression": "DAY([Date])",
+            "isHidden": true,
+            "lineageTag": "4e495b09-24a0-46b3-9ba2-c61a45d991e3",
+            "summarizeBy": "none",
+            "type": "calculated"
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Date Hierarchy",
+            "annotations": [
+              {
+                "name": "TemplateId",
+                "value": "DateHierarchy"
+              }
+            ],
+            "levels": [
+              {
+                "name": "Year",
+                "column": "Year",
+                "lineageTag": "d3c85e4e-7d1a-413f-8939-74512bc60523",
+                "ordinal": 0
+              },
+              {
+                "name": "Quarter",
+                "column": "Quarter",
+                "lineageTag": "2e3364bf-b841-4042-b062-1193974677fd",
+                "ordinal": 1
+              },
+              {
+                "name": "Month",
+                "column": "Month",
+                "lineageTag": "833e6173-e04f-4791-810b-5047287f08ce",
+                "ordinal": 2
+              },
+              {
+                "name": "Day",
+                "column": "Day",
+                "lineageTag": "ddf8eac1-7df6-4018-a447-c499cd2950cd",
+                "ordinal": 3
+              }
+            ],
+            "lineageTag": "8a4b0b05-dc45-4937-9430-68a29de4544f"
+          }
+        ],
+        "isHidden": true,
+        "isPrivate": true,
+        "lineageTag": "d0eba9ce-cf7d-4975-ac7d-f6979f5ea030",
+        "partitions": [
+          {
+            "name": "DateTableTemplate_6431a574-a085-450d-9a72-6bae2cdba0c6",
+            "mode": "import",
+            "source": {
+              "expression": "Calendar(Date(2015,1,1), Date(2015,1,1))",
+              "type": "calculated"
+            }
+          }
+        ]
+      },
+      {
+        "name": "_measures",
+        "annotations": [
+          {
+            "name": "PBI_Id",
+            "value": "ff90dcb147c0407088b1ef24cbd0597d"
+          },
+          {
+            "name": "436ba87b-9c83-4389-a31b-ebd06a36be98",
+            "value": "{\"Expression\":\"\"}"
+          }
+        ],
+        "columns": [
+          {
+            "name": "_measures_placeholder",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "isDataTypeInferred": true,
+            "isNameInferred": false,
+            "lineageTag": "b7112f3a-1781-4734-87bc-42b4beee8d39",
+            "sourceColumn": "[Column]",
+            "summarizeBy": "sum",
+            "type": "calculatedTableColumn"
+          }
+        ],
+        "lineageTag": "9068bb63-b4cb-4a8e-8b04-11871be4c404",
+        "partitions": [
+          {
+            "name": "_measures",
+            "mode": "import",
+            "source": {
+              "expression": "Row(\"Column\", BLANK())",
+              "type": "calculated"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
