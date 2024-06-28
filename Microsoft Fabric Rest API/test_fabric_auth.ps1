@@ -5,7 +5,37 @@ $pbipReportPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Q
 $currentPath = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 Set-Location $currentPath
 
-python load_env.py
+# Function to load environment variables from .env file
+function LoadDotEnv {
+    param(
+        [string]$envFile
+    )
+
+    # Read lines from the .env file
+    $lines = Get-Content -Path $envFile
+
+    foreach ($line in $lines) {
+        if ($line -match '^([^=]+)=(.*)$') {
+            $key = $matches[1].Trim()
+            $value = $matches[2].Trim()
+            Set-Item -Path "env:$key" -Value $value
+        }
+    }
+}
+
+# Load environment variables from secrets.env file
+$envFilePath = "../.env"
+LoadDotEnv -envFile $envFilePath
+
+# Access the loaded environment variables
+$CLIENT_ID = $env:CLIENT_ID
+$CLIENT_SECRET = $env:CLIENT_SECRET
+$TENANT_ID = $env:TENANT_ID
+# # Example usage
+Write-Output "CLIENT_ID: $CLIENT_ID"
+Write-Output "CLIENT_SECRET: $CLIENT_SECRET"
+Write-Output "TENANT_ID: $TENANT_ID"
+
 
 # Download modules and install
 New-Item -ItemType Directory -Path ".\modules" -ErrorAction SilentlyContinue | Out-Null
@@ -19,7 +49,7 @@ if(-not (Get-Module Az.Accounts -ListAvailable)) {
 Import-Module ".\modules\FabricPS-PBIP" -Force
 
 # Authenticate With service principal (spn)
-Set-FabricAuthToken -servicePrincipalId $CLIENT_ID -servicePrincipalSecret $CLIENT_SECRET -tenantId $TENANT_ID -reset
+Set-FabricAuthToken -servicePrincipalId $CLIENT_ID -servicePrincipalSecret $CLIENT_SECRET -tenantId 'raxglobal.onmicrosoft.com' -reset
 
 # Ensure workspace exists
 $workspaceId = New-FabricWorkspace  -name $workspaceName -skipErrorIfExists
@@ -29,3 +59,8 @@ $semanticModelImport = Import-FabricItem -workspaceId $workspaceId -path $pbipSe
 
 # Import the report and ensure its binded to the previous imported report
 $reportImport = Import-FabricItem -workspaceId $workspaceId -path $pbipReportPath -itemProperties @{"semanticModelId" = $semanticModelImport.Id}
+
+
+# Clean up by removing the environment variables from memory
+Remove-Item env:CLIENT_ID
+Remove-Item env:CLIENT_SECRET
