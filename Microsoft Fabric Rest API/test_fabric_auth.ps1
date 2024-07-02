@@ -1,5 +1,6 @@
 # Parameters 
 $workspaceName = "POC Test"
+# power bi report components to upload to powerbi service
 $pbipSemanticModelPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Quality Review\Quality Review.SemanticModel" #"[PBIP Path]\[Item Name].SemanticModel"
 $pbipReportPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Quality Review\Quality Review.Report" #"[PBIP Path]\[Item Name].Report"
 $currentPath = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
