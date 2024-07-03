@@ -50,8 +50,8 @@ def add_user_to_workspace(workspace_id, user_id, role):
 
 # Example usage:
 if __name__ == "__main__":
-    workspace_id = "5d39c3c1-2981-4813-85c6-2be841b580e9"  # Replace with the actual workspace ID
-    user_id = "b88fabd2-a643-4d2c-a109-e489101028a9"  # Replace with the actual user ID
+    workspace_id = "fdd80fc9-49d9-4fb5-9e1a-f080565c9c62" #"337e2d10-88de-40ae-9a75-08cc7dd46a3a" #"5d39c3c1-2981-4813-85c6-2be841b580e9"  # Replace with the actual workspace ID
+    user_id = "f19d236d-0e8b-484b-a8ab-a625bb667ab0" #"b88fabd2-a643-4d2c-a109-e489101028a9"  # Replace with the actual user ID
     role = "Member"  # Specify the role you want to assign
 
     add_user_to_workspace(workspace_id, user_id, role)
