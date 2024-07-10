@@ -1,8 +1,8 @@
 # Parameters 
 $workspaceName = "POC Test"
 # power bi report components to upload to powerbi service
-$pbipSemanticModelPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Quality Review\Quality Review.SemanticModel" #"[PBIP Path]\[Item Name].SemanticModel"
-$pbipReportPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Quality Review\Quality Review.Report" #"[PBIP Path]\[Item Name].Report"
+$pbipSemanticModelPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Racker 360\racker360.Dataset" #"[PBIP Path]\[Item Name].SemanticModel"
+$pbipReportPath = "C:\Users\dani7078\OneDrive - Rackspace Inc\Desktop\power_bi\Racker 360\racker360.Report" #"[PBIP Path]\[Item Name].Report"
 $currentPath = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 Set-Location $currentPath
 
@@ -32,10 +32,10 @@ LoadDotEnv -envFile $envFilePath
 $CLIENT_ID = $env:CLIENT_ID
 $CLIENT_SECRET = $env:CLIENT_SECRET
 $TENANT_ID = $env:TENANT_ID
-# # Example usage
-Write-Output "CLIENT_ID: $CLIENT_ID"
-Write-Output "CLIENT_SECRET: $CLIENT_SECRET"
-Write-Output "TENANT_ID: $TENANT_ID"
+# # # Example usage
+# Write-Output "CLIENT_ID: $CLIENT_ID"
+# Write-Output "CLIENT_SECRET: $CLIENT_SECRET"
+# Write-Output "TENANT_ID: $TENANT_ID"
 
 
 # Download modules and install
